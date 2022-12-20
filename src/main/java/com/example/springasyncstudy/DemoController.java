@@ -8,7 +8,7 @@ public class DemoController {
 
     private final DemoService demoService;
 
-    public DemoController(DemoService demoService) {
+    public DemoController(final DemoService demoService) {
         this.demoService = demoService;
     }
 
@@ -16,6 +16,12 @@ public class DemoController {
     public String sampleApi1() {
 
         return demoService.methodA();
+    }
+
+    @GetMapping("async")
+    public String sampleApi2() {
+
+        return demoService.methodA2();
     }
 
 }

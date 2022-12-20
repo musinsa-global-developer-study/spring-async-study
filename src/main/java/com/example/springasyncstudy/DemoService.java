@@ -14,6 +14,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class DemoService {
 
+    private final AsyncDemoService asyncDemoService;
+
+    public DemoService(final AsyncDemoService asyncDemoService) {
+        this.asyncDemoService = asyncDemoService;
+    }
 
     public String methodA() {
         String result = "";
@@ -67,5 +72,23 @@ public class DemoService {
     }
 
 
+    public String methodA2() {
+        String result = "";
+        List<Future<String>> results = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            final Future<String> stringFuture = asyncDemoService.methodB(i);
+            results.add(stringFuture);
+        }
 
+        results.forEach(stringFuture -> {
+            try {
+                System.out.println(stringFuture.get());
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
+        return result;
+    }
 }
